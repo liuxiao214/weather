@@ -19,6 +19,42 @@ const route = [
   { day: 'D13', date: '10-07', fullDate: '2026-10-07', place: '加德满都 Kathmandu', lat: 27.7172, lon: 85.3240, alt: 1400, dayLow: 24, dayHigh: 28, nightLow: 15, nightHigh: 19, rain: 28, snow: 0, wind: 20, code: 2 },
 ].map(point => ({ ...point, source: 'fallback' }));
 
+const endpointLocations = {
+  kathmandu: { id: 'kathmandu', place: '加德满都 Kathmandu', lat: 27.7172, lon: 85.3240, alt: 1400 },
+  lukla: { id: 'lukla', place: '卢卡拉 Lukla', lat: 27.6869, lon: 86.7297, alt: 2860 },
+  phakding: { id: 'phakding', place: '帕克丁 Phakding', lat: 27.7408, lon: 86.7123, alt: 2610 },
+  namche: { id: 'namche', place: '南池巴扎 Namche Bazaar', lat: 27.8053, lon: 86.7106, alt: 3440 },
+  tengboche: { id: 'tengboche', place: '天波切 Tengboche', lat: 27.8355, lon: 86.7649, alt: 3860 },
+  pangboche: { id: 'pangboche', place: '潘波切 Pangboche', lat: 27.8569, lon: 86.7940, alt: 3985 },
+  dingboche: { id: 'dingboche', place: '丁波切 Dingboche', lat: 27.8947, lon: 86.8314, alt: 4410 },
+  thukla: { id: 'thukla', place: '土克拉 Thukla', lat: 27.9237, lon: 86.8064, alt: 4620 },
+  lobuche: { id: 'lobuche', place: '罗布切 Lobuche', lat: 27.9485, lon: 86.8105, alt: 4910 },
+  gorakshep: { id: 'gorakshep', place: '戈瑞夏普 Gorak Shep', lat: 27.9803, lon: 86.8290, alt: 5140 },
+  ebc: { id: 'ebc', place: '珠峰大本营 EBC', lat: 27.9972, lon: 86.8472, alt: 5364 },
+  kalapatthar: { id: 'kalapatthar', place: '卡拉帕塔 Kala Patthar', lat: 27.9958, lon: 86.8284, alt: 5550 },
+  dzongla: { id: 'dzongla', place: '宗拉 Dzongla', lat: 27.9388, lon: 86.7732, alt: 4830 },
+  chola: { id: 'chola', place: '曲拉山口 Cho La Pass', lat: 27.9616, lon: 86.7571, alt: 5420 },
+  gokyo: { id: 'gokyo', place: '高乔湖 Gokyo Lake', lat: 27.9549, lon: 86.6946, alt: 4790 },
+  gokyori: { id: 'gokyori', place: '高乔峰 Gokyo Ri', lat: 27.9626, lon: 86.6832, alt: 5360 },
+  dole: { id: 'dole', place: '多勒 Dole', lat: 27.8727, lon: 86.7142, alt: 4200 },
+};
+
+const dailyEndpoints = [
+  { day: 'D1', fullDate: '2026-09-25', points: [{ role: '终点/到达地', location: endpointLocations.kathmandu }] },
+  { day: 'D2', fullDate: '2026-09-26', points: [{ role: '起点', location: endpointLocations.kathmandu }, { role: '途经', location: endpointLocations.lukla }, { role: '终点', location: endpointLocations.phakding }] },
+  { day: 'D3', fullDate: '2026-09-27', points: [{ role: '起点', location: endpointLocations.phakding }, { role: '终点', location: endpointLocations.namche }] },
+  { day: 'D4', fullDate: '2026-09-28', points: [{ role: '起点', location: endpointLocations.namche }, { role: '途经', location: endpointLocations.tengboche }, { role: '途经', location: endpointLocations.pangboche }, { role: '终点', location: endpointLocations.dingboche }] },
+  { day: 'D5', fullDate: '2026-09-29', points: [{ role: '起点', location: endpointLocations.dingboche }, { role: '途经', location: endpointLocations.thukla }, { role: '终点', location: endpointLocations.lobuche }] },
+  { day: 'D6', fullDate: '2026-09-30', points: [{ role: '起点', location: endpointLocations.lobuche }, { role: '途经/住宿点', location: endpointLocations.gorakshep }, { role: '途经', location: endpointLocations.ebc }] },
+  { day: 'D7', fullDate: '2026-10-01', points: [{ role: '起点', location: endpointLocations.gorakshep }, { role: '途经', location: endpointLocations.kalapatthar }, { role: '终点', location: endpointLocations.dzongla }] },
+  { day: 'D8', fullDate: '2026-10-02', points: [{ role: '起点', location: endpointLocations.dzongla }, { role: '途经', location: endpointLocations.chola }, { role: '终点', location: endpointLocations.gokyo }] },
+  { day: 'D9', fullDate: '2026-10-03', points: [{ role: '起点', location: endpointLocations.gokyo }, { role: '可选途经', location: endpointLocations.gokyori }, { role: '终点', location: endpointLocations.dole }] },
+  { day: 'D10', fullDate: '2026-10-04', points: [{ role: '起点', location: endpointLocations.dole }, { role: '终点', location: endpointLocations.namche }] },
+  { day: 'D11', fullDate: '2026-10-05', points: [{ role: '起点', location: endpointLocations.namche }, { role: '途经', location: endpointLocations.phakding }, { role: '终点', location: endpointLocations.lukla }] },
+  { day: 'D12', fullDate: '2026-10-06', points: [{ role: '起点', location: endpointLocations.lukla }, { role: '终点', location: endpointLocations.kathmandu }] },
+  { day: 'D13', fullDate: '2026-10-07', points: [{ role: '单点', location: endpointLocations.kathmandu }] },
+];
+
 const itinerary = [
   { day: '第一天', date: '09-25', route: '国内 → 加德满都 Kathmandu', meta: '机场接机，按航班时间安排', stay: '酒店', level: 'city' },
   { day: '第二天', date: '09-26', route: '加德满都 → 卢卡拉 → 帕克丁 Phakding', meta: '8km · 3—4小时 · ↑200m ↓450m', stay: '客栈', level: 'good' },
@@ -204,6 +240,9 @@ const MODEL_OPTIONS = {
   icon: { label: 'DWD ICON', detail: '德国全球预报模型', models: ['icon_seamless'] },
 };
 const HOURLY_FIELDS = ['temperature_2m', 'precipitation_probability', 'snowfall', 'weather_code', 'wind_gusts_10m'];
+const locationKey = point => `${point.lat},${point.lon},${point.alt}`;
+const weatherLocations = [...route, ...Object.values(endpointLocations)].filter((point, index, points) => points.findIndex(item => locationKey(item) === locationKey(point)) === index);
+const weatherLocationIndexes = new Map(weatherLocations.map((point, index) => [locationKey(point), index]));
 let selectedModel = 'blend';
 let activeRequest = null;
 
@@ -244,21 +283,24 @@ const datePlus = (date, days) => {
   return value.toISOString().slice(0, 10);
 };
 
+const TRIP_START_DATE = '2026-09-25';
+const TRIP_END_DATE = '2026-10-07';
 const forecastWindow = () => {
   const parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kathmandu', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date());
   const get = type => parts.find(part => part.type === type).value;
   const today = `${get('year')}-${get('month')}-${get('day')}`;
   const maxDate = datePlus(today, 15);
-  const start = route[0].fullDate < today ? today : route[0].fullDate;
-  const end = route.at(-1).fullDate > maxDate ? maxDate : route.at(-1).fullDate;
-  return { start, end, valid: start <= end };
+  const availableStart = today;
+  const availableEnd = maxDate;
+  const valid = TRIP_START_DATE <= availableEnd && TRIP_END_DATE >= availableStart;
+  return { start: TRIP_START_DATE, end: TRIP_END_DATE, availableStart, availableEnd, valid };
 };
 
 const fetchModel = async (model, startDate, endDate, signal) => {
   const params = new URLSearchParams({
-    latitude: route.map(point => point.lat).join(','),
-    longitude: route.map(point => point.lon).join(','),
-    elevation: route.map(point => point.alt).join(','),
+    latitude: weatherLocations.map(point => point.lat).join(','),
+    longitude: weatherLocations.map(point => point.lon).join(','),
+    elevation: weatherLocations.map(point => point.alt).join(','),
     hourly: HOURLY_FIELDS.join(','),
     timezone: 'Asia/Kathmandu',
     wind_speed_unit: 'kmh',
@@ -272,7 +314,7 @@ const fetchModel = async (model, startDate, endDate, signal) => {
   return Array.isArray(data) ? data : [data];
 };
 
-const fuseResponses = responses => route.map((_, locationIndex) => {
+const fuseResponses = responses => weatherLocations.map((_, locationIndex) => {
   const sources = responses.map(response => response[locationIndex]).filter(item => item?.hourly?.time);
   if (!sources.length) return null;
   const times = [...new Set(sources.flatMap(source => source.hourly.time))].sort();
@@ -315,6 +357,58 @@ const aggregateLocation = (point, payload) => {
   });
 };
 
+const tripDates = route.map(({ day, fullDate, date }) => ({ day, fullDate, date }));
+const emptyEndpointPoint = (location, role, tripDate, source) => enrichWeather({
+  ...location, ...tripDate, role, dayLow: 0, dayHigh: 0, nightLow: 0, nightHigh: 0,
+  rain: 0, snow: 0, wind: 0, code: 0, source,
+});
+const endpointMatrix = resolvePoint => dailyEndpoints.map(day => ({
+  ...day,
+  groups: day.points.map(({ role, location }) => ({
+    role,
+    location,
+    forecasts: tripDates.map(tripDate => resolvePoint(location, role, tripDate)),
+  })),
+}));
+
+const endpointWeatherFromResponses = (fused, window) => endpointMatrix((location, role, tripDate) => {
+  if (tripDate.fullDate < window.availableStart || tripDate.fullDate > window.availableEnd) return emptyEndpointPoint(location, role, tripDate, 'out-of-range');
+  const payload = fused[weatherLocationIndexes.get(locationKey(location))];
+  const base = { ...location, ...tripDate, role };
+  return aggregateLocation(base, payload) || emptyEndpointPoint(location, role, tripDate, 'pending');
+});
+
+const routeFallbackLocationIds = {
+  D1: 'kathmandu', D2: 'phakding', D3: 'namche', D4: 'dingboche', D5: 'lobuche',
+  D6: 'ebc', D7: 'kalapatthar', D8: 'chola', D9: 'gokyo', D10: 'dole',
+  D11: 'lukla', D12: 'kathmandu', D13: 'kathmandu',
+};
+const fallbackEndpointWeather = () => endpointMatrix((location, role, tripDate) => {
+  const fallback = route.find(point => point.fullDate === tripDate.fullDate
+    && (locationKey(point) === locationKey(location) || routeFallbackLocationIds[point.day] === location.id));
+  return fallback
+    ? enrichWeather({ ...fallback, ...location, role, source: 'fallback' })
+    : emptyEndpointPoint(location, role, tripDate, 'pending');
+});
+
+const emptyEndpointWeather = source => endpointMatrix((location, role, tripDate) => emptyEndpointPoint(location, role, tripDate, source));
+let endpointWeather = emptyEndpointWeather('pending');
+
+const endpointWeatherRow = point => {
+  const hasData = point.source === 'live' || point.source === 'fallback';
+  const sourceLabel = point.source === 'live' ? '实时' : point.source === 'fallback' ? '回退' : point.source === 'out-of-range' ? '超出范围' : '暂无实时数据';
+  return `<tr class="${hasData ? '' : 'unavailable'}"><td>${point.fullDate}<small>${sourceLabel}</small></td><td>${point.place}</td><td>${point.alt.toLocaleString()}m</td><td>${hasData ? `${point.weather.icon} ${point.weather.text}` : sourceLabel}</td><td>${hasData ? formatRange(point.dayLow, point.dayHigh) : '—'}</td><td>${hasData ? formatRange(point.nightLow, point.nightHigh) : '—'}</td><td>${hasData ? `${point.rain}%` : '—'}</td><td>${hasData ? `${point.snow} cm` : '—'}</td><td>${hasData ? `${point.wind} km/h` : '—'}</td><td>${hasData ? `<b class="risk ${point.level}"><i></i>${point.status}</b>` : `<b class="range-badge">${sourceLabel}</b>`}</td></tr>`;
+};
+const endpointWeatherTable = day => `<div class="endpoint-weather-groups">${day.groups.map(group => `<details class="endpoint-location-group"><summary><b>${group.role}</b><span>${group.location.place}</span><small>${group.location.alt.toLocaleString()}m · 13 天</small><i>⌄</i></summary><div class="endpoint-table-wrap"><table class="endpoint-weather-table"><thead><tr><th>日期</th><th>地点</th><th>海拔</th><th>天气</th><th>白天温度范围</th><th>夜晚温度范围</th><th>降水概率</th><th>降雪量</th><th>最大阵风</th><th>风险等级</th></tr></thead><tbody>${group.forecasts.map(endpointWeatherRow).join('')}</tbody></table></div></details>`).join('')}</div>`;
+
+const renderEndpointWeather = days => {
+  endpointWeather = days;
+  days.forEach(day => {
+    const target = document.querySelector(`[data-endpoint-weather="${day.day}"]`);
+    if (target) target.innerHTML = endpointWeatherTable(day);
+  });
+};
+
 const forecastRows = points => points.map(point => {
   const unavailable = point.source === 'unavailable';
   const sourceLabel = point.source === 'live' ? '实时' : point.source === 'fallback' ? '回退' : '超出范围';
@@ -345,6 +439,20 @@ const summaryMarkup = points => {
   const snow = Math.round(available.reduce((sum, point) => sum + point.snow, 0) * 10) / 10;
   return `<article class="score-card dark-card"><div class="card-head"><span class="tag">综合研判</span><span class="live"><i></i>${available.some(point => point.source === 'live') ? '实时更新' : '回退数据'}</span></div><div class="score-row"><strong>${score || '—'}</strong><div><b>整体适宜度</b><span>${score >= 70 ? '整体条件适宜，仍需关注山区变化' : '条件有限，重点关注高海拔风雪'}</span></div></div><div class="score-bar"><span style="width:${score}%"></span></div><div class="score-scale"><span>严峻</span><span>谨慎</span><span>适宜</span><span>理想</span></div></article><article class="metric-card"><div class="metric-icon temp">♨</div><span>预报温度范围</span><strong>${minTemp}° <small>至</small> ${maxTemp}°</strong><p>白天与夜间小时数据聚合</p></article><article class="metric-card"><div class="metric-icon wind">≋</div><span>最大阵风</span><strong>${gustPoint?.wind ?? '—'} <small>km/h</small></strong><p>${gustPoint ? `${gustPoint.place.split(' ')[0]} · ${gustPoint.date}` : '暂无有效预报'}</p></article><article class="metric-card"><div class="metric-icon snow">✣</div><span>累计新雪</span><strong>${snow} <small>cm</small></strong><p>有效预报日期累计</p></article>`;
 };
+
+const trackByDay = new Map(dayTracks.map(day => [day.day, day]));
+const endpointDetails = day => `<section class="endpoint-weather-details"><h4>关键节点天气</h4><div data-endpoint-weather="${day}">${endpointWeatherTable(endpointWeather.find(item => item.day === day))}</div></section>`;
+const dayTrackCards = () => itinerary.map((item, index) => {
+  const dayId = `D${index + 1}`;
+  const day = trackByDay.get(dayId);
+  const headerExtra = day
+    ? `<div class="track-stats"><span><small>轨迹距离</small><b>${day.distance.toFixed(1)} km</b></span><span><small>当日爬升</small><b>${day.ascent.toLocaleString()} m</b></span><span><small>当日下降</small><b>${day.descent.toLocaleString()} m</b></span><span><small>最低海拔</small><b>${day.minAlt.toLocaleString()} m</b></span><span><small>最高海拔</small><b>${day.maxAlt.toLocaleString()} m</b></span></div>`
+    : `<div class="non-hiking-status"><b>${dayId === 'D12' ? '飞行日' : '城市日'}</b><span>无徒步轨迹</span></div>`;
+  const trackDetails = day
+    ? `<details class="track-details"><summary>查看轨迹平面图与海拔图<span>⌄</span></summary><div class="track-visuals"><figure><figcaption>轨迹平面图</figcaption>${routeMap(day.points, day.day, fullTrack, day.landmarks)}</figure><figure><figcaption>海拔剖面图</figcaption>${elevationSvg(day.points, day.day, day.distance, day.landmarks)}</figure></div></details>`
+    : '';
+  return `<article class="track-day-card"><div class="track-card-head"><div><span class="track-day">${dayId} · ${item.date}</span><h3>${item.route}</h3><p class="track-itinerary-meta">${item.meta} · 住宿：${item.stay}</p></div>${headerExtra}</div>${trackDetails}${endpointDetails(dayId)}</article>`;
+}).join('');
 
 const app = document.querySelector('#app');
 app.innerHTML = `
@@ -392,13 +500,13 @@ app.innerHTML = `
     </section>
 
     <section class="tracks-section" id="tracks">
-      <div class="forecast-header"><div><span class="tag light">真实 KML 轨迹</span><h2>每日徒步轨迹与海拔</h2><p>D2—D11 · 经纬度投影与累计距离剖面</p></div><span class="trip-badge">10 个徒步日</span></div>
+      <div class="forecast-header"><div><span class="tag light">真实 KML 轨迹</span><h2>每日徒步轨迹与海拔</h2><p>D1—D13 · 09 月 25 日—10 月 07 日 · 行程与关键节点天气</p></div><span class="trip-badge">13 个日卡 · 10 个徒步日</span></div>
       <div class="complete-track-grid">
         <article class="full-track-card"><div class="track-card-head"><div><span class="track-day">完整路线</span><h3>EBC · Gokyo 全程轨迹</h3></div><div class="track-stats"><span><small>总距离</small><b>${fullDistance.toFixed(1)} km</b></span><span><small>累计爬升</small><b>${fullAscent.toLocaleString()} m</b></span><span><small>累计下降</small><b>${fullDescent.toLocaleString()} m</b></span><span><small>最低海拔</small><b>${fullMinAlt.toLocaleString()} m</b></span><span><small>最高海拔</small><b>${fullMaxAlt.toLocaleString()} m</b></span></div></div><figure>${routeMap(fullTrack, '全程', null, fullLandmarks)}</figure></article>
         <article class="full-track-card"><div class="track-card-head"><div><span class="track-day">完整剖面</span><h3>全程海拔变化</h3></div></div><figure>${elevationSvg(fullTrack, '完整路线', fullDistance, fullDayMarkers)}</figure></article>
       </div>
       <div class="track-day-list">
-        ${dayTracks.map(day => { const item = itinerary[day.itineraryIndex]; return `<article class="track-day-card"><div class="track-card-head"><div><span class="track-day">${day.day} · ${item.date}</span><h3>${item.route}</h3></div><div class="track-stats"><span><small>轨迹距离</small><b>${day.distance.toFixed(1)} km</b></span><span><small>当日爬升</small><b>${day.ascent.toLocaleString()} m</b></span><span><small>当日下降</small><b>${day.descent.toLocaleString()} m</b></span><span><small>最低海拔</small><b>${day.minAlt.toLocaleString()} m</b></span><span><small>最高海拔</small><b>${day.maxAlt.toLocaleString()} m</b></span></div></div><details class="track-details"><summary>查看轨迹平面图与海拔图<span>⌄</span></summary><div class="track-visuals"><figure><figcaption>轨迹平面图</figcaption>${routeMap(day.points, day.day, fullTrack, day.landmarks)}</figure><figure><figcaption>海拔剖面图</figcaption>${elevationSvg(day.points, day.day, day.distance, day.landmarks)}</figure></div></details></article>`; }).join('')}
+        ${dayTrackCards()}
       </div>
     </section>
 
@@ -440,10 +548,12 @@ const loadWeather = async () => {
   button.querySelector('b').textContent = '更新中…';
   statusElement.className = 'weather-status loading';
   statusElement.textContent = `正在请求 Open-Meteo · ${model.label}…`;
+  renderEndpointWeather(emptyEndpointWeather('pending'));
 
   if (!window.valid) {
     const unavailable = route.map(point => ({ ...enrichWeather(point), source: 'unavailable' }));
     renderWeather(unavailable, '整个行程已超出 Open-Meteo 当前可预报范围。', 'warning');
+    renderEndpointWeather(emptyEndpointWeather('out-of-range'));
     document.querySelector('#updatedTime').textContent = '无有效预报';
     button.disabled = false;
     button.classList.remove('loading');
@@ -456,25 +566,29 @@ const loadWeather = async () => {
   try {
     const responses = await Promise.all(model.models.map(item => fetchModel(item, window.start, window.end, controller.signal)));
     const fused = fuseResponses(responses);
-    const points = route.map((point, index) => {
-      if (point.fullDate < window.start || point.fullDate > window.end) return { ...enrichWeather(point), source: 'unavailable' };
-      return aggregateLocation(point, fused[index]) || { ...enrichWeather(point), source: 'unavailable' };
+    const points = route.map(point => {
+      if (point.fullDate < window.availableStart || point.fullDate > window.availableEnd) return { ...enrichWeather(point), source: 'unavailable' };
+      return aggregateLocation(point, fused[weatherLocationIndexes.get(locationKey(point))]) || { ...enrichWeather(point), source: 'unavailable' };
     });
     const liveCount = points.filter(point => point.source === 'live').length;
     const rangeNote = liveCount < route.length ? `；${route.length - liveCount} 天超出可预报范围` : '';
     renderWeather(points, `实时 Open-Meteo · ${model.label}${rangeNote}`, 'live');
+    renderEndpointWeather(endpointWeatherFromResponses(fused, window));
     document.querySelector('#updatedTime').textContent = new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
   } catch (error) {
     if (error.name !== 'AbortError') {
       renderWeather(route.map(enrichWeather), '实时数据获取失败，当前为回退数据', 'error');
+      renderEndpointWeather(fallbackEndpointWeather());
       document.querySelector('#updatedTime').textContent = '获取失败 · 回退数据';
       console.error('Open-Meteo forecast request failed:', error);
     }
   } finally {
-    activeRequest = null;
-    button.disabled = false;
-    button.classList.remove('loading');
-    button.querySelector('b').textContent = '刷新预报';
+    if (activeRequest === controller) {
+      activeRequest = null;
+      button.disabled = false;
+      button.classList.remove('loading');
+      button.querySelector('b').textContent = '刷新预报';
+    }
   }
 };
 
