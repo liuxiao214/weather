@@ -17,7 +17,7 @@ const route = [
   { day: 'D11', date: '10-05', fullDate: '2026-10-05', place: '卢卡拉 Lukla', lat: 27.6869, lon: 86.7297, alt: 2860, dayLow: 8, dayHigh: 12, nightLow: 0, nightHigh: 4, rain: 30, snow: 0, wind: 32, code: 2 },
   { day: 'D12', date: '10-06', fullDate: '2026-10-06', place: '加德满都 Kathmandu', lat: 27.7172, lon: 85.3240, alt: 1400, dayLow: 23, dayHigh: 27, nightLow: 15, nightHigh: 19, rain: 35, snow: 0, wind: 21, code: 61 },
   { day: 'D13', date: '10-07', fullDate: '2026-10-07', place: '加德满都 Kathmandu', lat: 27.7172, lon: 85.3240, alt: 1400, dayLow: 24, dayHigh: 28, nightLow: 15, nightHigh: 19, rain: 28, snow: 0, wind: 20, code: 2 },
-].map(point => ({ ...point, source: 'fallback' }));
+].map(point => ({ rainfall: 0, ...point, source: 'fallback' }));
 
 const endpointLocations = {
   kathmandu: { id: 'kathmandu', place: '加德满都 Kathmandu', lat: 27.7172, lon: 85.3240, alt: 1400 },
@@ -239,7 +239,7 @@ const MODEL_OPTIONS = {
   gfs: { label: 'NOAA GFS', detail: '美国全球预报系统', models: ['gfs_seamless'] },
   icon: { label: 'DWD ICON', detail: '德国全球预报模型', models: ['icon_seamless'] },
 };
-const HOURLY_FIELDS = ['temperature_2m', 'precipitation_probability', 'snowfall', 'weather_code', 'wind_gusts_10m'];
+const HOURLY_FIELDS = ['temperature_2m', 'precipitation_probability', 'rain', 'snowfall', 'weather_code', 'wind_gusts_10m'];
 const locationKey = point => `${point.lat},${point.lon},${point.alt}`;
 const weatherLocations = [...route, ...Object.values(endpointLocations)].filter((point, index, points) => points.findIndex(item => locationKey(item) === locationKey(point)) === index);
 const weatherLocationIndexes = new Map(weatherLocations.map((point, index) => [locationKey(point), index]));
@@ -335,7 +335,7 @@ const aggregateLocation = (point, payload) => {
   const records = payload.hourly.time.map((time, index) => ({
     date: time.slice(0, 10), hour: Number(time.slice(11, 13)),
     temp: payload.hourly.temperature_2m?.[index], rain: payload.hourly.precipitation_probability?.[index],
-    snow: payload.hourly.snowfall?.[index], code: payload.hourly.weather_code?.[index], wind: payload.hourly.wind_gusts_10m?.[index],
+    rainfall: payload.hourly.rain?.[index], snow: payload.hourly.snowfall?.[index], code: payload.hourly.weather_code?.[index], wind: payload.hourly.wind_gusts_10m?.[index],
   }));
   const today = records.filter(record => record.date === point.fullDate);
   if (!today.length) return null;
@@ -352,6 +352,7 @@ const aggregateLocation = (point, payload) => {
     ...point, source: 'live', dayLow: Math.min(...dayTemps), dayHigh: Math.max(...dayTemps),
     nightLow: Math.min(...nightTemps), nightHigh: Math.max(...nightTemps),
     rain: Math.round(Math.max(...numberValues(today.map(record => record.rain)), 0)),
+    rainfall: Math.round(numberValues(today.map(record => record.rainfall)).reduce((sum, value) => sum + value, 0) * 10) / 10,
     snow: Math.round(numberValues(today.map(record => record.snow)).reduce((sum, value) => sum + value, 0) * 10) / 10,
     wind: Math.round(Math.max(...numberValues(today.map(record => record.wind)), 0)), code: codes[0] ?? 0,
   });
@@ -360,7 +361,7 @@ const aggregateLocation = (point, payload) => {
 const tripDates = route.map(({ day, fullDate, date }) => ({ day, fullDate, date }));
 const emptyEndpointPoint = (location, role, tripDate, source) => enrichWeather({
   ...location, ...tripDate, role, dayLow: 0, dayHigh: 0, nightLow: 0, nightHigh: 0,
-  rain: 0, snow: 0, wind: 0, code: 0, source,
+  rain: 0, rainfall: 0, snow: 0, wind: 0, code: 0, source,
 });
 const endpointMatrix = resolvePoint => dailyEndpoints.map(day => ({
   ...day,
@@ -397,9 +398,9 @@ let endpointWeather = emptyEndpointWeather('pending');
 const endpointWeatherRow = point => {
   const hasData = point.source === 'live' || point.source === 'fallback';
   const sourceLabel = point.source === 'live' ? '实时' : point.source === 'fallback' ? '回退' : point.source === 'out-of-range' ? '超出范围' : '暂无实时数据';
-  return `<tr class="${hasData ? '' : 'unavailable'}"><td>${point.fullDate}<small>${sourceLabel}</small></td><td>${point.place}</td><td>${point.alt.toLocaleString()}m</td><td>${hasData ? `${point.weather.icon} ${point.weather.text}` : sourceLabel}</td><td>${hasData ? formatRange(point.dayLow, point.dayHigh) : '—'}</td><td>${hasData ? formatRange(point.nightLow, point.nightHigh) : '—'}</td><td>${hasData ? `${point.rain}%` : '—'}</td><td>${hasData ? `${point.snow} cm` : '—'}</td><td>${hasData ? `${point.wind} km/h` : '—'}</td><td>${hasData ? `<b class="risk ${point.level}"><i></i>${point.status}</b>` : `<b class="range-badge">${sourceLabel}</b>`}</td></tr>`;
+  return `<tr class="${hasData ? '' : 'unavailable'}"><td>${point.fullDate}<small>${sourceLabel}</small></td><td>${point.place}</td><td>${point.alt.toLocaleString()}m</td><td>${hasData ? `${point.weather.icon} ${point.weather.text}` : sourceLabel}</td><td>${hasData ? formatRange(point.dayLow, point.dayHigh) : '—'}</td><td>${hasData ? formatRange(point.nightLow, point.nightHigh) : '—'}</td><td>${hasData ? `${point.rain}%` : '—'}</td><td>${hasData ? `${point.rainfall} mm` : '—'}</td><td>${hasData ? `${point.snow} cm` : '—'}</td><td>${hasData ? `${point.wind} km/h` : '—'}</td><td>${hasData ? `<b class="risk ${point.level}"><i></i>${point.status}</b>` : `<b class="range-badge">${sourceLabel}</b>`}</td></tr>`;
 };
-const endpointWeatherTable = day => `<div class="endpoint-weather-groups">${day.groups.map(group => `<details class="endpoint-location-group"><summary><b>${group.role}</b><span>${group.location.place}</span><small>${group.location.alt.toLocaleString()}m · 13 天</small><i>⌄</i></summary><div class="endpoint-table-wrap"><table class="endpoint-weather-table"><thead><tr><th>日期</th><th>地点</th><th>海拔</th><th>天气</th><th>白天温度范围</th><th>夜晚温度范围</th><th>降水概率</th><th>降雪量</th><th>最大阵风</th><th>风险等级</th></tr></thead><tbody>${group.forecasts.map(endpointWeatherRow).join('')}</tbody></table></div></details>`).join('')}</div>`;
+const endpointWeatherTable = day => `<div class="endpoint-weather-groups">${day.groups.map(group => `<details class="endpoint-location-group"><summary><b>${group.role}</b><span>${group.location.place}</span><small>${group.location.alt.toLocaleString()}m · 13 天</small><i>⌄</i></summary><div class="endpoint-table-wrap"><table class="endpoint-weather-table"><thead><tr><th>日期</th><th>地点</th><th>海拔</th><th>天气</th><th>白天温度范围</th><th>夜晚温度范围</th><th>降水概率</th><th>降雨量</th><th>降雪量</th><th>最大阵风</th><th>风险等级</th></tr></thead><tbody>${group.forecasts.map(endpointWeatherRow).join('')}</tbody></table></div></details>`).join('')}</div>`;
 
 const renderEndpointWeather = days => {
   endpointWeather = days;
@@ -412,7 +413,7 @@ const renderEndpointWeather = days => {
 const forecastRows = points => points.map(point => {
   const unavailable = point.source === 'unavailable';
   const sourceLabel = point.source === 'live' ? '实时' : point.source === 'fallback' ? '回退' : '超出范围';
-  return `<div class="table-row ${unavailable ? 'unavailable' : ''}"><span class="day">${point.day}<small>${point.date} · ${sourceLabel}</small></span><span class="place"><b>${point.place}</b><small>${point.alt.toLocaleString()}m · ${point.lat.toFixed(3)}, ${point.lon.toFixed(3)}</small></span><span class="weather-cell"><span class="weather-icon">${unavailable ? '—' : point.weather.icon}</span><small>${unavailable ? '超出可预报范围' : point.weather.text}</small></span><span class="temp-pair"><b><i>昼</i>${unavailable ? '—' : formatRange(point.dayLow, point.dayHigh)}</b><b><i>夜</i>${unavailable ? '—' : formatRange(point.nightLow, point.nightHigh)}</b></span><span><b class="rain">${unavailable ? '—' : `${point.rain}%`}</b><small>概率</small></span><span><b class="snow-value">${unavailable ? '—' : `${point.snow} cm`}</b><small>新雪</small></span><span><b>${unavailable ? '—' : `${point.wind} km/h`}</b><small>最大阵风</small></span><span>${unavailable ? '<b class="range-badge">超出范围</b>' : `<b class="risk ${point.level}"><i></i>${point.status}</b>`}</span></div>`;
+  return `<div class="table-row ${unavailable ? 'unavailable' : ''}"><span class="day">${point.day}<small>${point.date} · ${sourceLabel}</small></span><span class="place"><b>${point.place}</b><small>${point.alt.toLocaleString()}m · ${point.lat.toFixed(3)}, ${point.lon.toFixed(3)}</small></span><span class="weather-cell"><span class="weather-icon">${unavailable ? '—' : point.weather.icon}</span><small>${unavailable ? '超出可预报范围' : point.weather.text}</small></span><span class="temp-pair"><b><i>昼</i>${unavailable ? '—' : formatRange(point.dayLow, point.dayHigh)}</b><b><i>夜</i>${unavailable ? '—' : formatRange(point.nightLow, point.nightHigh)}</b></span><span><b class="rain">${unavailable ? '—' : `${point.rain}%`}</b><small>概率</small></span><span><b class="rainfall-value">${unavailable ? '—' : `${point.rainfall} mm`}</b><small>降雨量</small></span><span><b class="snow-value">${unavailable ? '—' : `${point.snow} cm`}</b><small>新雪</small></span><span><b>${unavailable ? '—' : `${point.wind} km/h`}</b><small>最大阵风</small></span><span>${unavailable ? '<b class="range-badge">超出范围</b>' : `<b class="risk ${point.level}"><i></i>${point.status}</b>`}</span></div>`;
 }).join('');
 
 const chartMarkup = points => {
@@ -494,7 +495,7 @@ app.innerHTML = `
     <section class="forecast-section" id="forecast">
       <div class="forecast-header"><div><span class="tag light">行程天气</span><h2>每日住宿点与关键垭口</h2><p>按 09 月 25 日—10 月 07 日行程映射 · 当地时间</p></div><div class="updated"><i></i><span>最后更新<br><b id="updatedTime">刚刚</b></span></div></div>
       <div class="forecast-table">
-        <div class="table-row table-head"><span>行程</span><span>地点 / 海拔</span><span>天气</span><span>白天 / 夜晚</span><span>降水</span><span>降雪</span><span>风速</span><span>风险等级</span></div>
+        <div class="table-row table-head"><span>行程</span><span>地点 / 海拔</span><span>天气</span><span>白天 / 夜晚</span><span>降水概率</span><span>降雨量</span><span>降雪</span><span>风速</span><span>风险等级</span></div>
         <div id="forecastRows">${forecastRows(weatherRoute)}</div>
       </div>
     </section>
