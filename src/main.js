@@ -4,25 +4,20 @@ import L from 'leaflet';
 import { hikingDays, trackSegments } from './trackData.js';
 
 const route = [
-  { day: 'D1', date: '09-25', place: '加德满都 Kathmandu', alt: 1400, dayTemp: 26, nightTemp: 18, rain: 38, snow: 0, wind: 10, icon: 'cloud-sun', status: '适宜', level: 'good' },
-  { day: 'D2', date: '09-26', place: '卢卡拉 Lukla', alt: 2860, dayTemp: 11, nightTemp: 3, rain: 24, snow: 0, wind: 18, icon: 'cloud-sun', status: '适宜', level: 'good' },
-  { day: 'D3', date: '09-27', place: '南池巴扎 Namche', alt: 3440, dayTemp: 8, nightTemp: -1, rain: 32, snow: 0, wind: 24, icon: 'cloud', status: '适宜', level: 'good' },
-  { day: 'D4', date: '09-28', place: '丁波切 Dingboche', alt: 4410, dayTemp: 2, nightTemp: -8, rain: 18, snow: 1, wind: 36, icon: 'wind', status: '谨慎', level: 'warn' },
-  { day: 'D5', date: '09-29', place: '罗布切 Lobuche', alt: 4910, dayTemp: -1, nightTemp: -12, rain: 12, snow: 3, wind: 43, icon: 'snow', status: '高风险', level: 'danger' },
-  { day: 'D6', date: '09-30', place: '珠峰大本营 EBC', alt: 5364, dayTemp: -5, nightTemp: -18, rain: 14, snow: 5, wind: 56, icon: 'snow', status: '严峻', level: 'danger' },
-  { day: 'D7', date: '10-01', place: '卡拉帕塔 Kala Patthar', alt: 5550, dayTemp: -7, nightTemp: -20, rain: 10, snow: 2, wind: 62, icon: 'wind', status: '严峻', level: 'danger' },
-  { day: 'D8', date: '10-02', place: '曲拉山口 Cho La', alt: 5420, dayTemp: -6, nightTemp: -19, rain: 16, snow: 6, wind: 58, icon: 'snow', status: '严峻', level: 'danger' },
-  { day: 'D9', date: '10-03', place: '高乔湖 Gokyo', alt: 4790, dayTemp: 0, nightTemp: -13, rain: 15, snow: 1, wind: 39, icon: 'cloud-sun', status: '谨慎', level: 'warn' },
-  { day: 'D10', date: '10-04', place: '多勒 Dole', alt: 4200, dayTemp: 4, nightTemp: -7, rain: 22, snow: 0, wind: 31, icon: 'cloud', status: '谨慎', level: 'warn' },
-  { day: 'D11', date: '10-05', place: '卢卡拉 Lukla', alt: 2860, dayTemp: 10, nightTemp: 2, rain: 30, snow: 0, wind: 20, icon: 'cloud-sun', status: '适宜', level: 'good' },
-  { day: 'D12', date: '10-06', place: '加德满都 Kathmandu', alt: 1400, dayTemp: 25, nightTemp: 17, rain: 35, snow: 0, wind: 9, icon: 'cloud-sun', status: '适宜', level: 'good' },
-  { day: 'D13', date: '10-07', place: '加德满都 Kathmandu', alt: 1400, dayTemp: 26, nightTemp: 17, rain: 28, snow: 0, wind: 8, icon: 'cloud-sun', status: '适宜', level: 'good' },
-];
-
-route.forEach(point => {
-  point.dayRange = `${point.dayTemp - 2}°~${point.dayTemp + 2}°`;
-  point.nightRange = `${point.nightTemp - 2}°~${point.nightTemp + 2}°`;
-});
+  { day: 'D1', date: '09-25', fullDate: '2026-09-25', place: '加德满都 Kathmandu', lat: 27.7172, lon: 85.3240, alt: 1400, dayLow: 24, dayHigh: 28, nightLow: 16, nightHigh: 20, rain: 38, snow: 0, wind: 22, code: 3 },
+  { day: 'D2', date: '09-26', fullDate: '2026-09-26', place: '帕克丁 Phakding', lat: 27.7408, lon: 86.7123, alt: 2610, dayLow: 11, dayHigh: 15, nightLow: 3, nightHigh: 7, rain: 24, snow: 0, wind: 30, code: 2 },
+  { day: 'D3', date: '09-27', fullDate: '2026-09-27', place: '南池巴扎 Namche', lat: 27.8053, lon: 86.7106, alt: 3440, dayLow: 6, dayHigh: 10, nightLow: -3, nightHigh: 1, rain: 32, snow: 0, wind: 36, code: 3 },
+  { day: 'D4', date: '09-28', fullDate: '2026-09-28', place: '丁波切 Dingboche', lat: 27.8947, lon: 86.8314, alt: 4410, dayLow: 0, dayHigh: 4, nightLow: -10, nightHigh: -6, rain: 18, snow: 1, wind: 36, code: 71 },
+  { day: 'D5', date: '09-29', fullDate: '2026-09-29', place: '罗布切 Lobuche', lat: 27.9485, lon: 86.8105, alt: 4910, dayLow: -3, dayHigh: 1, nightLow: -14, nightHigh: -10, rain: 12, snow: 3, wind: 43, code: 73 },
+  { day: 'D6', date: '09-30', fullDate: '2026-09-30', place: '珠峰大本营 EBC', lat: 28.0026, lon: 86.8528, alt: 5364, dayLow: -7, dayHigh: -3, nightLow: -20, nightHigh: -16, rain: 14, snow: 5, wind: 56, code: 73 },
+  { day: 'D7', date: '10-01', fullDate: '2026-10-01', place: '卡拉帕塔 Kala Patthar', lat: 27.9958, lon: 86.8284, alt: 5550, dayLow: -9, dayHigh: -5, nightLow: -22, nightHigh: -18, rain: 10, snow: 2, wind: 62, code: 71 },
+  { day: 'D8', date: '10-02', fullDate: '2026-10-02', place: '曲拉山口 Cho La', lat: 27.9608, lon: 86.7520, alt: 5420, dayLow: -8, dayHigh: -4, nightLow: -21, nightHigh: -17, rain: 16, snow: 6, wind: 58, code: 75 },
+  { day: 'D9', date: '10-03', fullDate: '2026-10-03', place: '高乔湖 Gokyo', lat: 27.9549, lon: 86.6946, alt: 4790, dayLow: -2, dayHigh: 2, nightLow: -15, nightHigh: -11, rain: 15, snow: 1, wind: 39, code: 71 },
+  { day: 'D10', date: '10-04', fullDate: '2026-10-04', place: '多勒 Dole', lat: 27.8727, lon: 86.7142, alt: 4200, dayLow: 2, dayHigh: 6, nightLow: -9, nightHigh: -5, rain: 22, snow: 0, wind: 31, code: 3 },
+  { day: 'D11', date: '10-05', fullDate: '2026-10-05', place: '卢卡拉 Lukla', lat: 27.6869, lon: 86.7297, alt: 2860, dayLow: 8, dayHigh: 12, nightLow: 0, nightHigh: 4, rain: 30, snow: 0, wind: 32, code: 2 },
+  { day: 'D12', date: '10-06', fullDate: '2026-10-06', place: '加德满都 Kathmandu', lat: 27.7172, lon: 85.3240, alt: 1400, dayLow: 23, dayHigh: 27, nightLow: 15, nightHigh: 19, rain: 35, snow: 0, wind: 21, code: 61 },
+  { day: 'D13', date: '10-07', fullDate: '2026-10-07', place: '加德满都 Kathmandu', lat: 27.7172, lon: 85.3240, alt: 1400, dayLow: 24, dayHigh: 28, nightLow: 15, nightHigh: 19, rain: 28, snow: 0, wind: 20, code: 2 },
+].map(point => ({ ...point, source: 'fallback' }));
 
 const itinerary = [
   { day: '第一天', date: '09-25', route: '国内 → 加德满都 Kathmandu', meta: '机场接机，按航班时间安排', stay: '酒店', level: 'city' },
@@ -202,17 +197,153 @@ const fullMaxAlt = Math.max(...hikingDays.map(day => day.maxAlt));
 const fullAscent = hikingDays.reduce((sum, day) => sum + day.ascent, 0);
 const fullDescent = hikingDays.reduce((sum, day) => sum + day.descent, 0);
 
-const icon = (type) => ({
-  'cloud-sun': '<span class="weather-icon">🌤️</span>', cloud: '<span class="weather-icon">☁️</span>',
-  snow: '<span class="weather-icon">🌨️</span>', wind: '<span class="weather-icon">💨</span>'
-}[type]);
+const MODEL_OPTIONS = {
+  blend: { label: '智能融合', detail: 'ECMWF · GFS · ICON', models: ['ecmwf_ifs025', 'gfs_seamless', 'icon_seamless'] },
+  ecmwf: { label: 'ECMWF IFS', detail: '欧洲中期天气预报中心', models: ['ecmwf_ifs025'] },
+  gfs: { label: 'NOAA GFS', detail: '美国全球预报系统', models: ['gfs_seamless'] },
+  icon: { label: 'DWD ICON', detail: '德国全球预报模型', models: ['icon_seamless'] },
+};
+const HOURLY_FIELDS = ['temperature_2m', 'precipitation_probability', 'snowfall', 'weather_code', 'wind_gusts_10m'];
+let selectedModel = 'blend';
+let activeRequest = null;
 
-const weatherText = (point) => {
-  if (point.snow >= 5) return '中雪';
-  if (point.snow > 0) return '小雪';
-  if (point.icon === 'wind') return '晴间多云·风大';
-  if (point.icon === 'cloud') return '阴到多云';
-  return point.rain >= 35 ? '多云有阵雨' : '多云间晴';
+const weatherInfo = code => {
+  if ([95, 96, 99].includes(code)) return { text: '雷暴', icon: '⛈️', severity: 10 };
+  if ([75, 77, 85, 86].includes(code)) return { text: '大雪', icon: '🌨️', severity: 9 };
+  if ([73].includes(code)) return { text: '中雪', icon: '🌨️', severity: 8 };
+  if ([71].includes(code)) return { text: '小雪', icon: '🌨️', severity: 7 };
+  if ([65, 67, 82].includes(code)) return { text: '强降雨', icon: '🌧️', severity: 6 };
+  if ([61, 63, 66, 80, 81].includes(code)) return { text: '有雨', icon: '🌧️', severity: 5 };
+  if ([51, 53, 55, 56, 57].includes(code)) return { text: '毛毛雨', icon: '🌦️', severity: 4 };
+  if ([45, 48].includes(code)) return { text: '有雾', icon: '🌫️', severity: 3 };
+  if (code === 3) return { text: '阴天', icon: '☁️', severity: 2 };
+  if ([1, 2].includes(code)) return { text: '多云间晴', icon: '🌤️', severity: 1 };
+  return { text: '晴朗', icon: '☀️', severity: 0 };
+};
+
+const riskInfo = point => {
+  const cold = Math.min(point.dayLow, point.nightLow);
+  if (point.wind >= 55 || point.snow >= 5 || cold <= -18) return { status: '严峻', level: 'danger' };
+  if (point.wind >= 40 || point.snow >= 2 || cold <= -10) return { status: '高风险', level: 'danger' };
+  if (point.wind >= 30 || point.snow > 0 || point.rain >= 55 || cold <= -5) return { status: '谨慎', level: 'warn' };
+  return { status: '适宜', level: 'good' };
+};
+
+const enrichWeather = point => ({ ...point, ...riskInfo(point), weather: weatherInfo(point.code) });
+let weatherRoute = route.map(enrichWeather);
+
+const formatRange = (low, high) => `${Math.round(low)}°~${Math.round(high)}°`;
+const numberValues = values => values.filter(Number.isFinite);
+const average = values => {
+  const valid = numberValues(values);
+  return valid.length ? valid.reduce((sum, value) => sum + value, 0) / valid.length : null;
+};
+const datePlus = (date, days) => {
+  const value = new Date(`${date}T00:00:00Z`);
+  value.setUTCDate(value.getUTCDate() + days);
+  return value.toISOString().slice(0, 10);
+};
+
+const forecastWindow = () => {
+  const parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kathmandu', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date());
+  const get = type => parts.find(part => part.type === type).value;
+  const today = `${get('year')}-${get('month')}-${get('day')}`;
+  const maxDate = datePlus(today, 15);
+  const start = route[0].fullDate < today ? today : route[0].fullDate;
+  const end = route.at(-1).fullDate > maxDate ? maxDate : route.at(-1).fullDate;
+  return { start, end, valid: start <= end };
+};
+
+const fetchModel = async (model, startDate, endDate, signal) => {
+  const params = new URLSearchParams({
+    latitude: route.map(point => point.lat).join(','),
+    longitude: route.map(point => point.lon).join(','),
+    elevation: route.map(point => point.alt).join(','),
+    hourly: HOURLY_FIELDS.join(','),
+    timezone: 'Asia/Kathmandu',
+    wind_speed_unit: 'kmh',
+    start_date: startDate,
+    end_date: endDate,
+    models: model,
+  });
+  const response = await fetch(`https://api.open-meteo.com/v1/forecast?${params}`, { signal });
+  if (!response.ok) throw new Error(`Open-Meteo ${response.status}`);
+  const data = await response.json();
+  return Array.isArray(data) ? data : [data];
+};
+
+const fuseResponses = responses => route.map((_, locationIndex) => {
+  const sources = responses.map(response => response[locationIndex]).filter(item => item?.hourly?.time);
+  if (!sources.length) return null;
+  const times = [...new Set(sources.flatMap(source => source.hourly.time))].sort();
+  const indexes = sources.map(source => new Map(source.hourly.time.map((time, index) => [time, index])));
+  const hourly = { time: times };
+  HOURLY_FIELDS.forEach(field => {
+    hourly[field] = times.map(time => {
+      const values = sources.map((source, sourceIndex) => source.hourly[field]?.[indexes[sourceIndex].get(time)]).filter(Number.isFinite);
+      if (field === 'weather_code') return values.sort((a, b) => weatherInfo(b).severity - weatherInfo(a).severity)[0] ?? null;
+      return average(values);
+    });
+  });
+  return { hourly };
+});
+
+const aggregateLocation = (point, payload) => {
+  if (!payload?.hourly?.time) return null;
+  const records = payload.hourly.time.map((time, index) => ({
+    date: time.slice(0, 10), hour: Number(time.slice(11, 13)),
+    temp: payload.hourly.temperature_2m?.[index], rain: payload.hourly.precipitation_probability?.[index],
+    snow: payload.hourly.snowfall?.[index], code: payload.hourly.weather_code?.[index], wind: payload.hourly.wind_gusts_10m?.[index],
+  }));
+  const today = records.filter(record => record.date === point.fullDate);
+  if (!today.length) return null;
+  const dayTemps = numberValues(today.filter(record => record.hour >= 6 && record.hour < 18).map(record => record.temp));
+  const nextDate = datePlus(point.fullDate, 1);
+  const eveningTemps = numberValues(today.filter(record => record.hour >= 18).map(record => record.temp));
+  const nextMorningTemps = numberValues(records.filter(record => record.date === nextDate && record.hour < 6).map(record => record.temp));
+  const nightTemps = nextMorningTemps.length
+    ? [...eveningTemps, ...nextMorningTemps]
+    : numberValues(today.filter(record => record.hour < 6 || record.hour >= 18).map(record => record.temp));
+  if (!dayTemps.length || !nightTemps.length) return null;
+  const codes = numberValues(today.map(record => record.code)).sort((a, b) => weatherInfo(b).severity - weatherInfo(a).severity);
+  return enrichWeather({
+    ...point, source: 'live', dayLow: Math.min(...dayTemps), dayHigh: Math.max(...dayTemps),
+    nightLow: Math.min(...nightTemps), nightHigh: Math.max(...nightTemps),
+    rain: Math.round(Math.max(...numberValues(today.map(record => record.rain)), 0)),
+    snow: Math.round(numberValues(today.map(record => record.snow)).reduce((sum, value) => sum + value, 0) * 10) / 10,
+    wind: Math.round(Math.max(...numberValues(today.map(record => record.wind)), 0)), code: codes[0] ?? 0,
+  });
+};
+
+const forecastRows = points => points.map(point => {
+  const unavailable = point.source === 'unavailable';
+  const sourceLabel = point.source === 'live' ? '实时' : point.source === 'fallback' ? '回退' : '超出范围';
+  return `<div class="table-row ${unavailable ? 'unavailable' : ''}"><span class="day">${point.day}<small>${point.date} · ${sourceLabel}</small></span><span class="place"><b>${point.place}</b><small>${point.alt.toLocaleString()}m · ${point.lat.toFixed(3)}, ${point.lon.toFixed(3)}</small></span><span class="weather-cell"><span class="weather-icon">${unavailable ? '—' : point.weather.icon}</span><small>${unavailable ? '超出可预报范围' : point.weather.text}</small></span><span class="temp-pair"><b><i>昼</i>${unavailable ? '—' : formatRange(point.dayLow, point.dayHigh)}</b><b><i>夜</i>${unavailable ? '—' : formatRange(point.nightLow, point.nightHigh)}</b></span><span><b class="rain">${unavailable ? '—' : `${point.rain}%`}</b><small>概率</small></span><span><b class="snow-value">${unavailable ? '—' : `${point.snow} cm`}</b><small>新雪</small></span><span><b>${unavailable ? '—' : `${point.wind} km/h`}</b><small>最大阵风</small></span><span>${unavailable ? '<b class="range-badge">超出范围</b>' : `<b class="risk ${point.level}"><i></i>${point.status}</b>`}</span></div>`;
+}).join('');
+
+const chartMarkup = points => {
+  const available = points.filter(point => point.source !== 'unavailable');
+  const lows = available.flatMap(point => [point.dayLow, point.nightLow]);
+  const highs = available.flatMap(point => [point.dayHigh, point.nightHigh]);
+  const min = Math.floor((Math.min(...lows, -5) - 5) / 5) * 5;
+  const max = Math.ceil((Math.max(...highs, 5) + 5) / 5) * 5;
+  const span = max - min;
+  return `<div class="combined-plot"><div class="temperature-grid"><i></i><i></i><i></i><i class="zero"></i><i></i><i></i><i></i></div><svg class="altitude-line" viewBox="0 0 920 220" preserveAspectRatio="none" aria-hidden="true"><path d="M ${points.map((point,index)=>`${(index+.5)*(920/points.length)} ${210-((point.alt-1400)/4300)*190}`).join(' L ')}"/></svg><div class="altitude-points" style="grid-template-columns:repeat(${points.length},1fr)">${points.map(point=>`<div><i style="bottom:${((point.alt-1400)/4300)*190+10}px" title="${point.place} ${point.alt}m"></i></div>`).join('')}</div><div class="combined-temp-bars" style="grid-template-columns:repeat(${points.length},1fr)">${points.map(point => {
+    if (point.source === 'unavailable') return '<div class="combined-day no-data"><span>超出范围</span></div>';
+    const dayBottom=((point.dayLow-min)/span)*210, nightBottom=((point.nightLow-min)/span)*210;
+    const dayHeight=Math.max(((point.dayHigh-point.dayLow)/span)*210, 4), nightHeight=Math.max(((point.nightHigh-point.nightLow)/span)*210, 4);
+    return `<div class="combined-day"><div class="range-wrap day-range" style="bottom:${dayBottom}px;height:${dayHeight}px"><small>${Math.round(point.dayHigh)}°</small><i></i><small>${Math.round(point.dayLow)}°</small></div><div class="range-wrap night-range" style="bottom:${nightBottom}px;height:${nightHeight}px"><small>${Math.round(point.nightHigh)}°</small><i></i><small>${Math.round(point.nightLow)}°</small></div></div>`;
+  }).join('')}</div><div class="route-labels" style="grid-template-columns:repeat(${points.length},1fr)">${points.map(point=>`<span><em>${point.date}</em><b>${point.place.split(' ')[0]}</b></span>`).join('')}</div></div><div class="altitude-axis"><span>5,700m</span><span>4,300m</span><span>2,900m</span><span>1,400m</span></div><div class="temperature-axis"><span>${max}°C</span><span>${Math.round(max-span/6)}°C</span><span>${Math.round(max-span*2/6)}°C</span><span>${Math.round(max-span*3/6)}°C</span><span>${Math.round(max-span*4/6)}°C</span><span>${Math.round(max-span*5/6)}°C</span><span>${min}°C</span></div>`;
+};
+
+const summaryMarkup = points => {
+  const available = points.filter(point => point.source !== 'unavailable');
+  const score = available.length ? Math.max(15, Math.round(100 - average(available.map(point => point.level === 'danger' ? 65 : point.level === 'warn' ? 32 : 8)))) : 0;
+  const minTemp = available.length ? Math.round(Math.min(...available.map(point => point.nightLow))) : '—';
+  const maxTemp = available.length ? Math.round(Math.max(...available.map(point => point.dayHigh))) : '—';
+  const gustPoint = available.reduce((best, point) => !best || point.wind > best.wind ? point : best, null);
+  const snow = Math.round(available.reduce((sum, point) => sum + point.snow, 0) * 10) / 10;
+  return `<article class="score-card dark-card"><div class="card-head"><span class="tag">综合研判</span><span class="live"><i></i>${available.some(point => point.source === 'live') ? '实时更新' : '回退数据'}</span></div><div class="score-row"><strong>${score || '—'}</strong><div><b>整体适宜度</b><span>${score >= 70 ? '整体条件适宜，仍需关注山区变化' : '条件有限，重点关注高海拔风雪'}</span></div></div><div class="score-bar"><span style="width:${score}%"></span></div><div class="score-scale"><span>严峻</span><span>谨慎</span><span>适宜</span><span>理想</span></div></article><article class="metric-card"><div class="metric-icon temp">♨</div><span>预报温度范围</span><strong>${minTemp}° <small>至</small> ${maxTemp}°</strong><p>白天与夜间小时数据聚合</p></article><article class="metric-card"><div class="metric-icon wind">≋</div><span>最大阵风</span><strong>${gustPoint?.wind ?? '—'} <small>km/h</small></strong><p>${gustPoint ? `${gustPoint.place.split(' ')[0]} · ${gustPoint.date}` : '暂无有效预报'}</p></article><article class="metric-card"><div class="metric-icon snow">✣</div><span>累计新雪</span><strong>${snow} <small>cm</small></strong><p>有效预报日期累计</p></article>`;
 };
 
 const app = document.querySelector('#app');
@@ -234,39 +365,18 @@ app.innerHTML = `
     <section class="control-panel">
       <div class="field route-field dropdown-field"><label>当前路线</label><button class="dropdown-trigger" id="routeTrigger" aria-expanded="false"><span class="route-dot"></span><b>EBC · Gokyo 环线</b><small>13 天 · 每日天气全覆盖</small><span class="chevron">⌄</span></button><div class="dropdown-menu" id="routeMenu"><button class="dropdown-option active" data-value="EBC · Gokyo 环线" data-detail="13 天 · 每日天气全覆盖"><b>EBC · Gokyo 环线</b><small>当前 13 天行程</small><i>✓</i></button><button class="dropdown-option" disabled><b>EBC 经典线</b><small>暂未配置行程</small></button><button class="dropdown-option" disabled><b>三垭口环线</b><small>暂未配置行程</small></button></div></div>
       <div class="field"><label>出发日期</label><button class="date-button"><span>▣</span><b>2026 年 09 月 25 日</b></button></div>
-      <div class="field model-field dropdown-field"><label>预报模型</label><button class="dropdown-trigger" id="modelTrigger" aria-expanded="false"><span class="pulse"></span><b>智能融合</b><small>ECMWF · GFS · ICON</small><span class="chevron">⌄</span></button><div class="dropdown-menu" id="modelMenu"><button class="dropdown-option active" data-value="智能融合" data-detail="ECMWF · GFS · ICON"><b>智能融合</b><small>多模型综合研判</small><i>✓</i></button><button class="dropdown-option" data-value="ECMWF IFS" data-detail="欧洲中期天气预报中心"><b>ECMWF IFS</b><small>欧洲中期天气预报中心</small><i></i></button><button class="dropdown-option" data-value="NOAA GFS" data-detail="美国全球预报系统"><b>NOAA GFS</b><small>美国全球预报系统</small><i></i></button><button class="dropdown-option" data-value="DWD ICON" data-detail="德国全球预报模型"><b>DWD ICON</b><small>德国全球预报模型</small><i></i></button></div></div>
+      <div class="field model-field dropdown-field"><label>预报模型</label><button class="dropdown-trigger" id="modelTrigger" aria-expanded="false"><span class="pulse"></span><b>智能融合</b><small>ECMWF · GFS · ICON</small><span class="chevron">⌄</span></button><div class="dropdown-menu" id="modelMenu"><button class="dropdown-option active" data-model="blend" data-value="智能融合" data-detail="ECMWF · GFS · ICON"><b>智能融合</b><small>多模型综合研判</small><i>✓</i></button><button class="dropdown-option" data-model="ecmwf" data-value="ECMWF IFS" data-detail="欧洲中期天气预报中心"><b>ECMWF IFS</b><small>欧洲中期天气预报中心</small><i></i></button><button class="dropdown-option" data-model="gfs" data-value="NOAA GFS" data-detail="美国全球预报系统"><b>NOAA GFS</b><small>美国全球预报系统</small><i></i></button><button class="dropdown-option" data-model="icon" data-value="DWD ICON" data-detail="德国全球预报模型"><b>DWD ICON</b><small>德国全球预报模型</small><i></i></button></div></div>
       <button class="refresh" id="refresh"><span>↻</span><b>刷新预报</b></button>
+      <div class="weather-status fallback" id="weatherStatus" role="status">正在获取 Open-Meteo 实时预报；加载完成前显示回退数据。</div>
     </section>
 
-    <section class="summary-grid">
-      <article class="score-card dark-card">
-        <div class="card-head"><span class="tag">综合研判</span><span class="live"><i></i>实时更新</span></div>
-        <div class="score-row"><strong>68</strong><div><b>整体适宜度</b><span>条件尚可，需关注高海拔大风</span></div></div>
-        <div class="score-bar"><span style="width:68%"></span></div>
-        <div class="score-scale"><span>严峻</span><span>谨慎</span><span>适宜</span><span>理想</span></div>
-      </article>
-      <article class="metric-card"><div class="metric-icon temp">♨</div><span>体感温度范围</span><strong>-24° <small>至</small> 12°</strong><p>昼夜温差显著</p></article>
-      <article class="metric-card"><div class="metric-icon wind">≋</div><span>最大阵风</span><strong>62 <small>km/h</small></strong><p>卡拉帕塔 · 10 月 01 日</p></article>
-      <article class="metric-card"><div class="metric-icon snow">✣</div><span>累计新雪</span><strong>18 <small>cm</small></strong><p>4,500m 以上</p></article>
-    </section>
+    <section class="summary-grid" id="summaryGrid">${summaryMarkup(weatherRoute)}</section>
 
     <section class="dashboard" id="risk">
       <div class="route-card">
         <div class="section-title"><div><span class="tag light">温度趋势</span><h2>海拔与昼夜温度范围</h2></div><div class="legend"><span><i class="alt-point-key"></i>海拔</span><span><i class="day-key"></i>白天</span><span><i class="night-key"></i>夜晚</span></div></div>
         <p class="chart-description">红色折线与圆点表示海拔；温度柱顶部与底部分别为最高、最低温，虚线为 0°C。</p>
-        <div class="combined-chart temperature-only-chart">
-          <div class="combined-plot">
-            <div class="temperature-grid"><i></i><i></i><i></i><i class="zero"></i><i></i><i></i><i></i></div>
-            <svg class="altitude-line" viewBox="0 0 920 220" preserveAspectRatio="none" aria-hidden="true"><path d="M ${route.map((p,i)=>`${(i+.5)*(920/route.length)} ${210-((p.alt-1400)/4300)*190}`).join(' L ')}"/></svg>
-            <div class="altitude-points" style="grid-template-columns:repeat(${route.length},1fr)">${route.map(p=>`<div><i style="bottom:${((p.alt-1400)/4300)*190+10}px" title="${p.place} ${p.alt}m"></i></div>`).join('')}</div>
-            <div class="combined-temp-bars" style="grid-template-columns:repeat(${route.length},1fr)">
-              ${route.map(p=>{const min=-25,span=60;const dayLow=p.dayTemp-2,dayHigh=p.dayTemp+2,nightLow=p.nightTemp-2,nightHigh=p.nightTemp+2;const dayBottom=((dayLow-min)/span)*210;const nightBottom=((nightLow-min)/span)*210;const dayHeight=((dayHigh-dayLow)/span)*210;const nightHeight=((nightHigh-nightLow)/span)*210;return `<div class="combined-day"><div class="range-wrap day-range" style="bottom:${dayBottom}px;height:${dayHeight}px"><small>${dayHigh}°</small><i></i><small>${dayLow}°</small></div><div class="range-wrap night-range" style="bottom:${nightBottom}px;height:${nightHeight}px"><small>${nightHigh}°</small><i></i><small>${nightLow}°</small></div></div>`}).join('')}
-            </div>
-            <div class="route-labels" style="grid-template-columns:repeat(${route.length},1fr)">${route.map(p=>`<span><em>${p.date}</em><b>${p.place.split(' ')[0]}</b></span>`).join('')}</div>
-          </div>
-          <div class="altitude-axis"><span>5,700m</span><span>4,300m</span><span>2,900m</span><span>1,400m</span></div>
-          <div class="temperature-axis"><span>35°C</span><span>25°C</span><span>15°C</span><span>5°C</span><span>-5°C</span><span>-15°C</span><span>-25°C</span></div>
-        </div>
+        <div class="combined-chart temperature-only-chart" id="temperatureChart">${chartMarkup(weatherRoute)}</div>
 
       </div>
 
@@ -277,7 +387,7 @@ app.innerHTML = `
       <div class="forecast-header"><div><span class="tag light">行程天气</span><h2>每日住宿点与关键垭口</h2><p>按 09 月 25 日—10 月 07 日行程映射 · 当地时间</p></div><div class="updated"><i></i><span>最后更新<br><b id="updatedTime">刚刚</b></span></div></div>
       <div class="forecast-table">
         <div class="table-row table-head"><span>行程</span><span>地点 / 海拔</span><span>天气</span><span>白天 / 夜晚</span><span>降水</span><span>降雪</span><span>风速</span><span>风险等级</span></div>
-        ${route.map(p=>`<div class="table-row"><span class="day">${p.day}<small>${p.date}</small></span><span class="place"><b>${p.place}</b><small>${p.alt.toLocaleString()}m</small></span><span class="weather-cell">${icon(p.icon)}<small>${weatherText(p)}</small></span><span class="temp-pair"><b><i>昼</i>${p.dayRange}</b><b><i>夜</i>${p.nightRange}</b></span><span><b class="rain">${p.rain}%</b><small>概率</small></span><span><b class="snow-value">${p.snow} cm</b><small>新雪</small></span><span><b>${p.wind} km/h</b><small>阵风 ${p.wind+12}</small></span><span><b class="risk ${p.level}"><i></i>${p.status}</b></span></div>`).join('')}
+        <div id="forecastRows">${forecastRows(weatherRoute)}</div>
       </div>
     </section>
 
@@ -301,10 +411,72 @@ app.innerHTML = `
     </section>
 
   </main>
-  <footer><b>徒步助手</b><span>高海拔天气，仅供行程规划参考。山区气象瞬息万变，请结合现场判断。</span><span>数据源 · ECMWF / NOAA GFS / DWD ICON</span></footer>
+  <footer><b>徒步助手</b><span>高海拔天气，仅供行程规划参考。山区气象瞬息万变，请结合现场判断。</span><span>天气数据 © <a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open-Meteo</a> · ECMWF / NOAA GFS / DWD ICON</span></footer>
 `;
 
 initializeSatelliteMaps();
+
+const renderWeather = (points, status, state = 'live') => {
+  weatherRoute = points;
+  document.querySelector('#summaryGrid').innerHTML = summaryMarkup(points);
+  document.querySelector('#temperatureChart').innerHTML = chartMarkup(points);
+  document.querySelector('#forecastRows').innerHTML = forecastRows(points);
+  const statusElement = document.querySelector('#weatherStatus');
+  statusElement.className = `weather-status ${state}`;
+  statusElement.textContent = status;
+};
+
+const loadWeather = async () => {
+  if (activeRequest) {
+    activeRequest.abort();
+    activeRequest = null;
+  }
+  const button = document.querySelector('#refresh');
+  const statusElement = document.querySelector('#weatherStatus');
+  const model = MODEL_OPTIONS[selectedModel];
+  const window = forecastWindow();
+  button.disabled = true;
+  button.classList.add('loading');
+  button.querySelector('b').textContent = '更新中…';
+  statusElement.className = 'weather-status loading';
+  statusElement.textContent = `正在请求 Open-Meteo · ${model.label}…`;
+
+  if (!window.valid) {
+    const unavailable = route.map(point => ({ ...enrichWeather(point), source: 'unavailable' }));
+    renderWeather(unavailable, '整个行程已超出 Open-Meteo 当前可预报范围。', 'warning');
+    document.querySelector('#updatedTime').textContent = '无有效预报';
+    button.disabled = false;
+    button.classList.remove('loading');
+    button.querySelector('b').textContent = '刷新预报';
+    return;
+  }
+
+  const controller = new AbortController();
+  activeRequest = controller;
+  try {
+    const responses = await Promise.all(model.models.map(item => fetchModel(item, window.start, window.end, controller.signal)));
+    const fused = fuseResponses(responses);
+    const points = route.map((point, index) => {
+      if (point.fullDate < window.start || point.fullDate > window.end) return { ...enrichWeather(point), source: 'unavailable' };
+      return aggregateLocation(point, fused[index]) || { ...enrichWeather(point), source: 'unavailable' };
+    });
+    const liveCount = points.filter(point => point.source === 'live').length;
+    const rangeNote = liveCount < route.length ? `；${route.length - liveCount} 天超出可预报范围` : '';
+    renderWeather(points, `实时 Open-Meteo · ${model.label}${rangeNote}`, 'live');
+    document.querySelector('#updatedTime').textContent = new Date().toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+  } catch (error) {
+    if (error.name !== 'AbortError') {
+      renderWeather(route.map(enrichWeather), '实时数据获取失败，当前为回退数据', 'error');
+      document.querySelector('#updatedTime').textContent = '获取失败 · 回退数据';
+      console.error('Open-Meteo forecast request failed:', error);
+    }
+  } finally {
+    activeRequest = null;
+    button.disabled = false;
+    button.classList.remove('loading');
+    button.querySelector('b').textContent = '刷新预报';
+  }
+};
 
 const dropdowns = document.querySelectorAll('.dropdown-field');
 dropdowns.forEach(field => {
@@ -335,6 +507,10 @@ dropdowns.forEach(field => {
       trigger.querySelector('small').textContent = option.dataset.detail;
       field.classList.remove('open');
       trigger.setAttribute('aria-expanded', 'false');
+      if (option.dataset.model && option.dataset.model !== selectedModel) {
+        selectedModel = option.dataset.model;
+        loadWeather();
+      }
     });
   });
 });
@@ -343,14 +519,6 @@ document.addEventListener('click', () => dropdowns.forEach(field => {
   field.querySelector('.dropdown-trigger').setAttribute('aria-expanded', 'false');
 }));
 
-document.querySelector('#refresh').addEventListener('click', (event) => {
-  const button = event.currentTarget;
-  button.classList.add('loading');
-  button.querySelector('b').textContent = '更新中…';
-  setTimeout(() => {
-    button.classList.remove('loading');
-    button.querySelector('b').textContent = '刷新预报';
-    document.querySelector('#updatedTime').textContent = new Date().toLocaleTimeString('zh-CN', {hour:'2-digit', minute:'2-digit'});
-  }, 900);
-});
+document.querySelector('#refresh').addEventListener('click', loadWeather);
+loadWeather();
 
